@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Orders.Backend.Data;
+using Orders.Backend.Repositories.Implementations;
+using Orders.Backend.Repositories.Interfaces;
+using Orders.Backend.UnitsOfWork.Implementations;
+using Orders.Backend.UnitsOfWork.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +17,10 @@ builder.Services.AddSwaggerGen();
 // Configura DataContext para usar SQL Server con la cadena de conexión especificada
 // Asegúrate de que "DockerConnection" coincida con el nombre de tu cadena de conexión en appsettings.json
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name=DockerConnection"));
+
+// Registra los tipos genéricos para inyección de dependencias
+builder.Services.AddScoped(typeof(IGenericUnitOfWork<>), typeof(GenericUnitOfWork<>));
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 var app = builder.Build();
 

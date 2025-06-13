@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Orders.Shared.Entities; // Importa las entidades compartidas
+using Orders.Shared.Entities;
 
 namespace Orders.Backend.Data
 {
@@ -9,12 +9,13 @@ namespace Orders.Backend.Data
         {
         }
 
-        public DbSet<Country> Countries { get; set; } // DbSet para la tabla de países
+        public DbSet<Category> Categories { get; set; } // DbSet para la tabla de categorías
+        public DbSet<Country> Countries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Configura un índice único en el campo 'Name' para evitar duplicados
+            modelBuilder.Entity<Category>().HasIndex(c => c.Name).IsUnique(); // Índice único para Category
             modelBuilder.Entity<Country>().HasIndex(c => c.Name).IsUnique();
         }
     }

@@ -7,4 +7,8 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Http
 @using Microsoft.JSInterop
 @using Orders.Frontend
-@using Orders.Frontend.Layout
+@using Orders.Frontend.Shared // Para GenericList, Loading, NavMenu, etc.
+@using Orders.Frontend.Pages.Countries // Para CountryForm, CountryCreate, CountryEdit, etc.
+@using Orders.Frontend.Repositories // Para IRepository y Repository
+@using Orders.Shared.Entities // Para Country, Category, etc.
+@using CurrieTechnologies.Razor.SweetAlert2 // Para SweetAlertService
