@@ -1,4 +1,6 @@
-﻿using System.Net; // Importa las clases de red
+﻿using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Orders.Frontend.Repositories
 {
@@ -6,9 +8,9 @@ namespace Orders.Frontend.Repositories
     {
         public HttpResponseWrapper(T? response, bool error, HttpResponseMessage httpResponseMessage)
         {
-            Response = response; // La respuesta real del servidor
-            Error = error; // Indica si hubo un error
-            HttpResponseMessage = httpResponseMessage; // El mensaje HTTP completo
+            Response = response;
+            Error = error;
+            HttpResponseMessage = httpResponseMessage;
         }
 
         public T? Response { get; }
@@ -19,17 +21,17 @@ namespace Orders.Frontend.Repositories
         {
             if (!Error)
             {
-                return null; // No hay error, no hay mensaje
+                return null;
             }
 
-            var statusCode = HttpResponseMessage.StatusCode; // Obtiene el código de estado HTTP
+            var statusCode = HttpResponseMessage.StatusCode;
             if (statusCode == HttpStatusCode.NotFound)
             {
                 return "Recurso no encontrado.";
             }
             if (statusCode == HttpStatusCode.BadRequest)
             {
-                return await HttpResponseMessage.Content.ReadAsStringAsync(); // Lee el mensaje de error del contenido
+                return await HttpResponseMessage.Content.ReadAsStringAsync();
             }
             if (statusCode == HttpStatusCode.Unauthorized)
             {
@@ -40,7 +42,7 @@ namespace Orders.Frontend.Repositories
                 return "No tienes permisos para hacer esta operación.";
             }
 
-            return "Ha ocurrido un error inesperado."; // Mensaje genérico para otros errores
+            return "Ha ocurrido un error inesperado.";
         }
     }
 }
