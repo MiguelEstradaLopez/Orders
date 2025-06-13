@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Orders.Backend.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Configura DataContext para usar SQL Server con la cadena de conexión especificada
+// Asegúrate de que "DockerConnection" coincida con el nombre de tu cadena de conexión en appsettings.json
+builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name=DockerConnection"));
 
 var app = builder.Build();
 
@@ -20,6 +27,11 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapControllers();
-
+app.MapControllers(); // Mapea los controladores de API
+// Configura CORS para permitir solicitudes desde cualquier origen
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true)
+    .AllowCredentials());
 app.Run();

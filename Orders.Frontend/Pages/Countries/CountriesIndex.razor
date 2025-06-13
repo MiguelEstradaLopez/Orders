@@ -1,0 +1,46 @@
+﻿@page "/countries" // Define la ruta de la página
+@using Orders.Frontend.Repositories
+@inject IRepository repository // Inyecta el repositorio
+
+<h3>Paises</h3>
+
+<div class="mb-3">
+    <a class="btn btn-primary" href="/countries/create">Nuevo País</a> // Botón para crear un nuevo país
+</div>
+
+<GenericList MyList="Countries"> // Usa el componente GenericList
+    <Body>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>País</th>
+                    <th></th> // Columna para acciones (editar/borrar)
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var country in Countries!) // Itera sobre la lista de países
+                {
+                    <tr>
+                        <td>
+                            @country.Name // Muestra el nombre del país
+                        </td>
+                        <td>
+                            <a class="btn btn-warning">Editar</a> // Botón Editar (sin funcionalidad aún)
+                            <button class="btn btn-danger">Borrar</button> // Botón Borrar (sin funcionalidad aún)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </Body>
+</GenericList>
+
+@code {
+    public List<Country>? Countries { get; set; } // Lista de países
+
+    protected async override Task OnInitializedAsync() // Se ejecuta cuando el componente se inicializa
+    {
+        var responseHppt = await repository.GetAsync<List<Country>>("api/countries"); // Llama a la API para obtener países
+        Countries = responseHppt.Response!; // Asigna la respuesta a la lista
+    }
+}
