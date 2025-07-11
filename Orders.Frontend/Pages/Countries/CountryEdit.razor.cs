@@ -1,16 +1,16 @@
 ﻿using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Orders.Frontend.Repositories;
-using Orders.Shared.Entities;
-using System.Net; // Para HttpStatusCode
-using System.Threading.Tasks;
+using Orders.Frontend.Shared;
+using Orders.Shared.Entites;
+
 
 namespace Orders.Frontend.Pages.Countries
 {
-    public partial class CountryEdit
+    public partial class CountryEdit : ComponentBase
     {
         private Country? country;
-        private CountryForm? countryForm;
+        private FormWithName<Country>? countryForm;
 
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
@@ -23,7 +23,7 @@ namespace Orders.Frontend.Pages.Countries
 
             if (responseHttp.Error)
             {
-                if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
                     NavigationManager.NavigateTo("countries");
                 }

@@ -1,10 +1,7 @@
 ﻿using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Orders.Frontend.Repositories;
-using Orders.Shared.Entities;
-using System.Collections.Generic;
-using System.Net; // Para HttpStatusCode
-using System.Threading.Tasks;
+using Orders.Shared.Entites;
 
 namespace Orders.Frontend.Pages.Countries
 {
@@ -43,7 +40,7 @@ namespace Orders.Frontend.Pages.Countries
                 ShowCancelButton = true
             });
 
-            var confirm = string.IsNullOrEmpty(result.Value); // SweetAlert2 devuelve null o string vacío si se cancela
+            var confirm = string.IsNullOrEmpty(result.Value);
 
             if (confirm)
             {
@@ -53,9 +50,9 @@ namespace Orders.Frontend.Pages.Countries
             var responseHTTP = await Repository.DeleteAsync($"api/countries/{country.Id}");
             if (responseHTTP.Error)
             {
-                if (responseHTTP.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    NavigationManager.NavigateTo("/"); // Redirige si no se encuentra
+                    NavigationManager.NavigateTo("/");
                 }
                 else
                 {
@@ -65,12 +62,12 @@ namespace Orders.Frontend.Pages.Countries
                 return;
             }
 
-            await LoadAsync(); // Recarga la lista después de borrar
+            await LoadAsync();
             var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
                 Position = SweetAlertPosition.BottomEnd,
-                ShowConfirmButton = true, // Mostrar botón de confirmación en el toast
+                ShowConfirmButton = true,
                 Timer = 3000
             });
             await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro borrado con éxito.");

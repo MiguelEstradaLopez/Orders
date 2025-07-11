@@ -1,21 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc; // Importa las clases de MVC (para atributos como ApiController y Route)
-using Orders.Backend.UnitsOfWork.Interfaces; // Necesario para IGenericUnitOfWork
-using Orders.Shared.Entities; // Necesario para la entidad Country
+﻿using Microsoft.AspNetCore.Mvc;
+using Orders.Backend.UnitsOfWork.Interfaces;
+using Orders.Shared.Entites;
 
 namespace Orders.Backend.Controllers
 {
-    [ApiController] // Indica que es un controlador de API
-    [Route("api/[controller]")] // Define la ruta base para el controlador
-    // Ahora hereda del controlador genérico, delegando las operaciones CRUD básicas a GenericController
+    [ApiController]
+    [Route("api/[controller]")]
     public class CountriesController : GenericController<Country>
     {
-        // El constructor ahora recibe una instancia de IGenericUnitOfWork<Country>
-        // y la pasa al constructor de la clase base (GenericController).
-        public CountriesController(IGenericUnitOfWork<Country> unit) : base(unit)
+        private readonly ICountriesUnitOfWork _countriesUnitOfWork;
+        public CountriesController(IGenericUnitOfWork<Country> unit, ICountriesUnitOfWork
+        countriesUnitOfWork) : base(unit)
         {
+            _countriesUnitOfWork = countriesUnitOfWork;
         }
-        // Todos los métodos CRUD (Get, Post, Put, Delete) y el DataContext privado
-        // se han eliminado de aquí porque ahora son manejados por GenericController.
-        // Solo necesitas el constructor para pasar la unidad de trabajo genérica.
+        [HttpGet]
+        public override async Task<IActionResult> GetAsync()
+        {
+            var response = await _countriesUnitOfWork.GetAsync();
+            if (response.WasSuccess)
+            {
+                return Ok(response.Result);
+            }
+            return BadRequest();
+        }
+        [HttpGet("{id}")]
+        public override async Task<IActionResult> GetAsync(int id)
+        {
+            var response = await _countriesUnitOfWork.GetAsync(id);
+            if (response.WasSuccess)
+            {
+                return Ok(response.Result);
+            }
+            return NotFound(response.Message);
+        }
+
     }
 }

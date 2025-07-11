@@ -3,11 +3,9 @@ using Orders.Backend.UnitsOfWork.Interfaces;
 
 namespace Orders.Backend.Controllers
 {
-    [ApiController] // Indica que es un controlador de API
-    [Route("api/[controller]")] // Ruta base
-    public class GenericController<T> : ControllerBase where T : class // Hereda de ControllerBase y es genérico
+    public class GenericController<T> : Controller where T : class
     {
-        private readonly IGenericUnitOfWork<T> _unitOfWork; // Inyecta la unidad de trabajo genérica
+        private readonly IGenericUnitOfWork<T> _unitOfWork;
 
         public GenericController(IGenericUnitOfWork<T> unitOfWork)
         {
@@ -44,7 +42,7 @@ namespace Orders.Backend.Controllers
             {
                 return Ok(action.Result);
             }
-            return BadRequest(action.Message); // Devuelve el mensaje de error del ActionResponse
+            return BadRequest(action.Message);
         }
 
         [HttpPut]
@@ -64,7 +62,7 @@ namespace Orders.Backend.Controllers
             var action = await _unitOfWork.DeleteAsync(id);
             if (action.WasSuccess)
             {
-                return NoContent(); // 204 No Content para eliminación exitosa
+                return NoContent();
             }
             return BadRequest(action.Message);
         }

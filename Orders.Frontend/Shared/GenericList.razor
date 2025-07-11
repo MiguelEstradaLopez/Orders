@@ -1,33 +1,41 @@
 ﻿@typeparam Titem
 
-@if (MyList is null) // Si la lista es nula (indicando que está cargando)
+@if (MyList is null)
 {
-    @if (Loading is null) // Si no se ha proporcionado un fragmento de carga personalizado
+    @if (Loading is null)
     {
-        <div class="d-flex justify-content-center align-items-center">
-            <img src="https://img.pikbest.com/png-images/20190918/cartoon-snail-loading-loading-gif-animation_2734139.png!bw700" />
-        </div>
+        <Loading />
     }
+
     else
     {
         @Loading
-        // Usa el fragmento de carga personalizado
     }
 }
-else if (MyList.Count == 0) // Si la lista está vacía
+else if (MyList.Count == 0)
 {
-    @if (NoRecords is null) // Si no se ha proporcionado un fragmento de "sin registros" personalizado
+    @if (NoRecords is null)
     {
         <p>No hay registros para mostrar...</p>
     }
     else
     {
         @NoRecords
-        // Usa el fragmento de "sin registros" personalizado
     }
 }
-else // Si hay registros
+else
 {
     @Body
-    // Renderiza el contenido principal proporcionado
+}
+
+@code {
+    [Parameter]
+    public RenderFragment? Loading { get; set; }
+
+    [Parameter]
+    public RenderFragment? NoRecords { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public RenderFragment Body { get; set; } = null!;
 }
